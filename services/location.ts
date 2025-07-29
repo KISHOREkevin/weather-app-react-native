@@ -20,4 +20,18 @@ const getLocation = async (location: string) => {
   
 }
 
-export default getLocation;
+const getStringLocation = async (lat:any,lon:any)=>{
+  try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status != 'granted') {
+        console.log("LOcation not permitted");
+        return;
+      }
+      const location = await Location.reverseGeocodeAsync({latitude:lat,longitude:lon});
+      return location;
+  } catch (error) {
+    throw error 
+  }
+}
+
+export {getLocation,getStringLocation};

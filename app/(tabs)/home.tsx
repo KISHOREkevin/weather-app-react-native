@@ -1,14 +1,53 @@
-import useFetchDaily from '@/hooks/fetchDailyWeather'
+import fetchWeatherData from '@/services/fetch'
+import {getLocation,getStringLocation} from '@/services/location'
 import { Ionicons } from '@expo/vector-icons'
+import { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native'
+
+import getWeatherIconAndDescription from '@/services/weatherCode'
 export default function Home() {
-    const {dailyTime} = useFetchDaily("");
-    
-    if(!dailyTime || dailyTime.length === 0 ){
-      return <ActivityIndicator size={24} />
-    }
+  let [load,setLoad] = useState<boolean>(false);
+  let [dailyTime,setDailyTime] = useState<any>();
+  let [dailyTemp,setDailyTemp] = useState<any>();
+  let [dailyCode,setDailyCode] = useState<any>();
+  let [hourlyTime,setHourlyTime] = useState<any>();
+  let [hourlytemp,setHourlyTemp] = useState<any>();
+  let [hourlyCode,setHourlyCode] = useState<any>();
+  let [place,setPlace] = useState("")
+  useEffect(()=>{
+    const fetchdata = async ()=>{
+      setLoad(true)
+      try {
+       const location = await getLocation("madurai");
+      const { dailyWeather,hourlyWeather,latitude,longitude } = await fetchWeatherData(location?.latitude,location?.longitude)       
+      setDailyTime(dailyWeather.time);
+      setDailyTemp(dailyWeather.temperature_2m_max);
+      setDailyCode(dailyWeather.weather_code);
+      setHourlyTime(hourlyWeather.time);
+      setHourlyTemp(hourlyWeather.temperature_2m);
+      setHourlyCode(hourlyWeather.weather_code);
+      const coordPlace=await getStringLocation(latitude,longitude); 
+      setPlace(`${coordPlace && coordPlace[0].city},${coordPlace && coordPlace[0].country}`)
       
-       return (
+    
+      } catch (error) {
+        console.log(error);
+        
+      }
+      setLoad(false);
+            
+    }
+    fetchdata();
+  },[])
+
+  if(load){
+    return (
+      <View style={styles.container}>
+          <ActivityIndicator />
+      </View>
+    )
+  }
+  return (
     <View style={styles.container}>
       <View style={{ display: "flex", flexDirection: "row" }}>
         <TextInput style={styles.input} />
@@ -16,45 +55,39 @@ export default function Home() {
           <Text style={{ color: "white", textAlign: "center" }}> <Ionicons name='search-sharp' size={24} /> </Text>
         </TouchableOpacity>
       </View>
-      <View style={{ height: "50%", marginTop: 20 }}>
-        <ScrollView horizontal={true} >
-          {/* --------------------------------------- */}
-          {[1,2,3,4,5].map((e)=>{
-            return ( <View key={e} style={{ width: 250, height: 300, boxShadow: "2px 2px 8px black", borderRadius: 5, margin: 5 }} >
-            <View style={{ marginTop: 10,marginBottom:10, display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
-              <Text>8478474</Text>
+      <Text>{place}</Text>
+      <ScrollView horizontal={true} style={{ marginTop: 20 }} >
+      {hourlyTime && hourlyTime.map((e:Date,i:number) => {
+          return (<View key={e.getTime()} style={{ width: 250, height: 250, boxShadow: "2px 2px 8px black", borderRadius: 5, margin: 5 }} >
+            <View style={{ marginTop: 10, marginBottom: 10, display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
+              <Text>{e.toLocaleTimeString()}</Text>
             </View>
 
-           <Text style={{textAlign:"center",marginTop:15}}> <Ionicons name='sunny' size={100} /></Text>
+            <Text style={{ textAlign: "center", marginTop: 15 }}> <Ionicons name={getWeatherIconAndDescription(hourlyCode[i]).icon} size={100} /></Text>
             <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-around", alignItems: "center" }}>
-              <Text style={styles.temperature}>90°F</Text>
-              <Text style={{ fontSize: 16 }}>light rain</Text>
+              <Text style={styles.temperature}>{hourlytemp[i].toFixed()}°F </Text>
+              <Text style={{ fontSize: 16 }}>{getWeatherIconAndDescription(hourlyCode[i]).description}</Text>
             </View>
-          </View>) 
-          })}
-         
-          
-          
-        </ScrollView>
-      </View>
+          </View>)
+        })}
+
+
+
+      </ScrollView>
       <ScrollView horizontal={true} >
-      {[1,2,3,4,5].map((e)=>{
-        return (
-          <View key={e} style={{ width: 250, height: 250, boxShadow: "2px 2px 8px black", borderRadius: 5, margin: 5 }} >
-          <View style={{ marginTop: 10, display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
-            <Text>2025-07-24</Text>
-          </View>
+        {dailyTime && dailyTime.map((e:Date,i:number) => {
+          return (<View key={e.getTime()} style={{ width: 250, height: 250, boxShadow: "2px 2px 8px black", borderRadius: 5, margin: 5 }} >
+            <View style={{ marginTop: 10, marginBottom: 10, display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
+              <Text>{e.toLocaleDateString().split("/").join("-")}</Text>
+            </View>
 
-          <Text  style={{textAlign:"center",marginTop:15}}><Ionicons name='sunny' size={100}/></Text>          
-          <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-around", alignItems: "center" }}>
-            <Text style={styles.temperature}>90°F</Text>
-            <Text style={{ fontSize: 16 }}>light rain</Text>
-          </View>
-        </View>
-
-        )
-      })}
-                        
+            <Text style={{ textAlign: "center", marginTop: 15 }}> <Ionicons name={getWeatherIconAndDescription(dailyCode[i]).icon} size={100} /></Text>
+            <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-around", alignItems: "center" }}>
+              <Text style={styles.temperature}>{dailyTemp[i].toFixed()}°F </Text>
+              <Text style={{ fontSize: 16 }}>{getWeatherIconAndDescription(dailyCode[i]).description} </Text>
+            </View>
+          </View>)
+        })}
       </ScrollView>
     </View>
   )
