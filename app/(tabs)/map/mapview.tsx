@@ -41,16 +41,18 @@ export default function map() {
       longitude:coordinate.longitude
     })
     
-    router.navigate({pathname:"/(tabs)/map/detail",params:{latitude:initialRegion.latitude,longitude:initialRegion.longitude}});
+    router.navigate({pathname:"/(tabs)/map/detail",params:{latitude:coordinate.latitude,longitude:coordinate.longitude}});
     
   }
 
-  if(load){
+ if(load){
     return (
       <View style={styles.container}>
-          <ActivityIndicator />
+          <ActivityIndicator size={50} />
+          <Text>Fetching Your location ....</Text>
       </View>
     )
+
   }
   return (
     <View style={styles.container}>

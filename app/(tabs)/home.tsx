@@ -13,12 +13,13 @@ export default function Home() {
   let [hourlyTime,setHourlyTime] = useState<any>();
   let [hourlytemp,setHourlyTemp] = useState<any>();
   let [hourlyCode,setHourlyCode] = useState<any>();
-  let [place,setPlace] = useState("")
+  let [place,setPlace] = useState("");
+  let [inputPlace,setInputPlace] = useState("");
   useEffect(()=>{
     const fetchdata = async ()=>{
       setLoad(true)
       try {
-       const location = await getLocation("madurai");
+       const location = await getLocation(inputPlace);
       const { dailyWeather,hourlyWeather,latitude,longitude } = await fetchWeatherData(location?.latitude,location?.longitude)       
       setDailyTime(dailyWeather.time);
       setDailyTemp(dailyWeather.temperature_2m_max);
@@ -39,21 +40,52 @@ export default function Home() {
     }
     fetchdata();
   },[])
+    
+  
+  const searchWeather = async (place:string)=>{
+    setLoad(true)
+      try {
+       const location = await getLocation(place);
+      const { dailyWeather,hourlyWeather,latitude,longitude } = await fetchWeatherData(location?.latitude,location?.longitude)       
+      setDailyTime(dailyWeather.time);
+      setDailyTemp(dailyWeather.temperature_2m_max);
+      setDailyCode(dailyWeather.weather_code);
+      setHourlyTime(hourlyWeather.time);
+      setHourlyTemp(hourlyWeather.temperature_2m);
+      setHourlyCode(hourlyWeather.weather_code);
+      const coordPlace=await getStringLocation(latitude,longitude); 
+      setPlace(`${coordPlace && coordPlace[0].city},${coordPlace && coordPlace[0].country}`)
+      
+    
+      } catch (error) {
+        console.log(error);
+        
+      }
+      setLoad(false);
+
+  }
 
   if(load){
     return (
       <View style={styles.container}>
-          <ActivityIndicator />
+          <ActivityIndicator size={50} />
+          <Text>Fetching Your location ....</Text>
       </View>
     )
+
   }
+  
   return (
     <View style={styles.container}>
       <View style={{ display: "flex", flexDirection: "row" }}>
-        <TextInput style={styles.input} />
-        <TouchableOpacity style={styles.button} >
+        <TextInput style={styles.input} onChangeText={(value)=>setInputPlace(value)} />
+        <TouchableOpacity style={styles.button} onPress={()=>searchWeather(inputPlace)} >
           <Text style={{ color: "white", textAlign: "center" }}> <Ionicons name='search-sharp' size={24} /> </Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={()=>searchWeather("")} >
+          <Text style={{ color: "white", textAlign: "center" }}> <Ionicons name="location" size={24} /> </Text>
+        </TouchableOpacity>
+
       </View>
       <Text>{place}</Text>
       <ScrollView horizontal={true} style={{ marginTop: 20 }} >
@@ -105,7 +137,7 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     padding: 10,
-    width: "80%",
+    width: "60%",
     margin: 5,
     borderRadius: 5,
     borderColor: "blue",

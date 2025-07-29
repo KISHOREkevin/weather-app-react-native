@@ -45,7 +45,7 @@ const weatherData = {
 	},
 	daily: {
 		time: [...Array((Number(daily.timeEnd()) - Number(daily.time())) / daily.interval())].map(
-			(_, i) => new Date((Number(daily.time()) + i * hourly.interval() + utcOffsetSeconds) * 1000)
+			(_, i) => new Date((Number(daily.time()) + i * daily.interval() + utcOffsetSeconds) * 1000)
 		),
 		weather_code: daily.variables(0)!.valuesArray(),
 		temperature_2m_max: daily.variables(1)!.valuesArray(),
