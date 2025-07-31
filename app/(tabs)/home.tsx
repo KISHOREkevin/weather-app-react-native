@@ -13,6 +13,7 @@ export default function Home() {
   let [hourlyTime,setHourlyTime] = useState<any>();
   let [hourlytemp,setHourlyTemp] = useState<any>();
   let [hourlyCode,setHourlyCode] = useState<any>();
+  let [error,setError] = useState<any|null>();
   let [place,setPlace] = useState("");
   let [inputPlace,setInputPlace] = useState("");
   useEffect(()=>{
@@ -32,7 +33,7 @@ export default function Home() {
       
     
       } catch (error) {
-        console.log(error);
+        setError(error);
         
       }
       setLoad(false);
@@ -58,7 +59,7 @@ export default function Home() {
       
     
       } catch (error) {
-        console.log(error);
+        setError(error);
         
       }
       setLoad(false);
@@ -68,34 +69,39 @@ export default function Home() {
   if(load){
     return (
       <View style={styles.container}>
-          <ActivityIndicator size={50} />
-          <Text>Fetching Your location ....</Text>
+          <ActivityIndicator size={50} color={"#B27092"} />
+          <Text style={{color:"#B27092"}}>Fetching Your location ....</Text>
       </View>
     )
 
   }
   
+  if(error){
+    return <View style={styles.container}>
+        <Text>{error}</Text>
+    </View>
+  }
   return (
     <View style={styles.container}>
       <View style={{ display: "flex", flexDirection: "row" }}>
         <TextInput style={styles.input} onChangeText={(value)=>setInputPlace(value)} />
         <TouchableOpacity style={styles.button} onPress={()=>searchWeather(inputPlace)} >
-          <Text style={{ color: "white", textAlign: "center" }}> <Ionicons name='search-sharp' size={24} /> </Text>
+          <Text style={{ color: "white", textAlign: "center" }}> <Ionicons color={"black"} name='search-sharp' size={20} /> </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={()=>searchWeather("")} >
-          <Text style={{ color: "white", textAlign: "center" }}> <Ionicons name="location" size={24} /> </Text>
+          <Text style={{ color: "white", textAlign: "center" }}> <Ionicons color={"black"} name="location" size={20} /> </Text>
         </TouchableOpacity>
 
       </View>
-      <Text>{place}</Text>
-      <ScrollView horizontal={true} style={{ marginTop: 20 }} >
+      <Text style={{color:"#B27092",padding:15,fontSize:24}}>{place}</Text>
+      <ScrollView horizontal={true} style={{ marginTop: 10 }} >
       {hourlyTime && hourlyTime.map((e:Date,i:number) => {
-          return (<View key={e.getTime()} style={{ width: 250, height: 250, boxShadow: "2px 2px 8px black", borderRadius: 5, margin: 5 }} >
+          return (<View key={e.getTime()} style={styles.card} >
             <View style={{ marginTop: 10, marginBottom: 10, display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
-              <Text>{e.toLocaleTimeString()}</Text>
+              <Text >{e.toLocaleTimeString()}</Text>
             </View>
 
-            <Text style={{ textAlign: "center", marginTop: 15 }}> <Ionicons name={getWeatherIconAndDescription(hourlyCode[i]).icon} size={100} /></Text>
+            <Text style={{ textAlign: "center", marginTop: 15  }}> <Ionicons name={getWeatherIconAndDescription(hourlyCode[i]).icon} size={100} /></Text>
             <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-around", alignItems: "center" }}>
               <Text style={styles.temperature}>{hourlytemp[i].toFixed()}°F </Text>
               <Text style={{ fontSize: 16 }}>{getWeatherIconAndDescription(hourlyCode[i]).description}</Text>
@@ -108,7 +114,7 @@ export default function Home() {
       </ScrollView>
       <ScrollView horizontal={true} >
         {dailyTime && dailyTime.map((e:Date,i:number) => {
-          return (<View key={e.getTime()} style={{ width: 250, height: 250, boxShadow: "2px 2px 8px black", borderRadius: 5, margin: 5 }} >
+          return (<View key={e.getTime()} style={styles.card} >
             <View style={{ marginTop: 10, marginBottom: 10, display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
               <Text>{e.toLocaleDateString().split("/").join("-")}</Text>
             </View>
@@ -132,7 +138,8 @@ const styles = StyleSheet.create({
 
     flex: 1,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    backgroundColor:"#512D38"
   },
   input: {
     borderWidth: 1,
@@ -140,15 +147,16 @@ const styles = StyleSheet.create({
     width: "60%",
     margin: 5,
     borderRadius: 5,
-    borderColor: "blue",
-
+    borderColor: "#B27092",
+    color:"white"  
   },
   button: {
     flex: 1,
     borderRadius: 5,
-    backgroundColor: "blue",
+    backgroundColor: "#B27092",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+    margin:2
   },
   image: {
     margin: 30,
@@ -159,8 +167,8 @@ const styles = StyleSheet.create({
   },
   temperature: {
     fontSize: 40,
-    fontWeight: "bold"
-  }
-
+    fontWeight: "bold",
+     },
+     card:{ width: 250, height: 250, boxShadow: "2px 2px 8px black", borderRadius: 15, margin: 5,backgroundColor:"#B27092" }
 })
 

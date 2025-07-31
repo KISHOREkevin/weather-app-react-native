@@ -8,21 +8,20 @@ import { router } from 'expo-router';
 export default function map() {
   let [initialRegion,setInitialRegion] = useState({latitude:0,longitude:0,latitudeDelta: 0.0922,longitudeDelta: 0.0421});
     let [load,setLoad]=useState(false);
+    let [error,setError] = useState<any|null>();
     useEffect(()=>{
     
       const getCurrentLocation = async ()=>{
       setLoad(true);
       const {status} = await Location.requestForegroundPermissionsAsync();
       if(status != 'granted'){
-          console.log("LOcation not permitted");
+          setError("LOcation not permitted");
           setLoad(false);
           return;
       }
 
       let location = await Location.getCurrentPositionAsync({});
       setInitialRegion({latitude:location.coords.latitude,longitude:location.coords.longitude,latitudeDelta: 0.0922,longitudeDelta: 0.0421});
-      console.log(location);
-      console.log(initialRegion);
       setLoad(false);
       
       
@@ -48,12 +47,19 @@ export default function map() {
  if(load){
     return (
       <View style={styles.container}>
-          <ActivityIndicator size={50} />
-          <Text>Fetching Your location ....</Text>
+          <ActivityIndicator size={50} color={"#B27092"} />
+          <Text style={{color:"#B27092"}}>Fetching Your location ....</Text>
       </View>
     )
 
   }
+
+  if(error){
+    return <View style={styles.container}>
+        <Text>{error}</Text>
+    </View>
+  }
+
   return (
     <View style={styles.container}>
 
@@ -68,7 +74,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    backgroundColor:"#512D38"
+
   },
   map: {
     width: "100%",

@@ -17,7 +17,7 @@ export default function Detail() {
   let [hourlytemp,setHourlyTemp] = useState<any>();
   let [hourlyCode,setHourlyCode] = useState<any>();
   let [place,setPlace] = useState("");
-
+  let [error,setError] = useState<any|null>();
   useEffect(()=>{
     const fetchdata = async ()=>{
       setLoad(true)
@@ -35,7 +35,7 @@ export default function Detail() {
       
     
       } catch (error) {
-        console.log(error);
+        setError(error);
         
       }
       setLoad(false);
@@ -53,13 +53,17 @@ export default function Detail() {
     )
 
   }
-
+  if(error){
+    return <View style={styles.container}>
+        <Text>{error}</Text>
+    </View>
+  }
   return (
     <View style={styles.container}>
-      <Text>{place}</Text>
+      <Text style={{color:"#B27092",padding:15,fontSize:24}}>{place}</Text>
       <ScrollView horizontal={true} style={{ marginTop: 20 }} >
       {hourlyTime && hourlyTime.map((e:Date,i:number) => {
-          return (<View key={e.getTime()} style={{ width: 250, height: 250, boxShadow: "2px 2px 8px black", borderRadius: 5, margin: 5 }} >
+          return (<View key={e.getTime()} style={styles.card} >
             <View style={{ marginTop: 10, marginBottom: 10, display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
               <Text>{e.toLocaleTimeString()}</Text>
             </View>
@@ -77,7 +81,7 @@ export default function Detail() {
       </ScrollView>
       <ScrollView horizontal={true} >
         {dailyTime && dailyTime.map((e:Date,i:number) => {
-          return (<View key={e.getTime()} style={{ width: 250, height: 250, boxShadow: "2px 2px 8px black", borderRadius: 5, margin: 5 }} >
+          return (<View key={e.getTime()} style={styles.card} >
             <View style={{ marginTop: 10, marginBottom: 10, display: "flex", flexDirection: "row", justifyContent: "space-around" }}>
               <Text>{e.toLocaleDateString().split("/").join("-")}</Text>
             </View>
@@ -99,23 +103,8 @@ const styles = StyleSheet.create({
 
     flex: 1,
     justifyContent: "center",
-    alignItems: "center"
-  },
-  input: {
-    borderWidth: 1,
-    padding: 10,
-    width: "60%",
-    margin: 5,
-    borderRadius: 5,
-    borderColor: "blue",
-
-  },
-  button: {
-    flex: 1,
-    borderRadius: 5,
-    backgroundColor: "blue",
     alignItems: "center",
-    justifyContent: "center"
+    backgroundColor:"#512D38" 
   },
   image: {
     margin: 30,
@@ -127,7 +116,9 @@ const styles = StyleSheet.create({
   temperature: {
     fontSize: 40,
     fontWeight: "bold"
-  }
+  },
+  card:{ width: 250, height: 250, boxShadow: "2px 2px 8px black", borderRadius: 15, margin: 5,backgroundColor:"#B27092" }
+
 
 })
 
