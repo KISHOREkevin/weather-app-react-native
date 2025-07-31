@@ -7,12 +7,12 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Activi
 import getWeatherIconAndDescription from '@/services/weatherCode'
 export default function Home() {
   let [load,setLoad] = useState<boolean>(false);
-  let [dailyTime,setDailyTime] = useState<any>();
-  let [dailyTemp,setDailyTemp] = useState<any>();
-  let [dailyCode,setDailyCode] = useState<any>();
-  let [hourlyTime,setHourlyTime] = useState<any>();
-  let [hourlytemp,setHourlyTemp] = useState<any>();
-  let [hourlyCode,setHourlyCode] = useState<any>();
+  let [dailyTime,setDailyTime] = useState<any>([]);
+  let [dailyTemp,setDailyTemp] = useState<any>([]);
+  let [dailyCode,setDailyCode] = useState<any>([]);
+  let [hourlyTime,setHourlyTime] = useState<any>([]);
+  let [hourlytemp,setHourlyTemp] = useState<any>([]);
+  let [hourlyCode,setHourlyCode] = useState<any>([]);
   let [error,setError] = useState<any|null>();
   let [place,setPlace] = useState("");
   let [inputPlace,setInputPlace] = useState("");
@@ -32,8 +32,8 @@ export default function Home() {
       setPlace(`${coordPlace && coordPlace[0].city},${coordPlace && coordPlace[0].country}`)
       
     
-      } catch (error) {
-        setError(error);
+      } catch (error:any) {
+        setError(error.message || "An unknown error occurred");
         
       }
       setLoad(false);
@@ -58,8 +58,8 @@ export default function Home() {
       setPlace(`${coordPlace && coordPlace[0].city},${coordPlace && coordPlace[0].country}`)
       
     
-      } catch (error) {
-        setError(error);
+      } catch (error:any) {
+        setError(error.message || "An unknown error occurred");
         
       }
       setLoad(false);
@@ -78,9 +78,11 @@ export default function Home() {
   
   if(error){
     return <View style={styles.container}>
-        <Text>{error}</Text>
+        <Text style={{color:"white",textAlign:"center"}}>{error}</Text>
     </View>
   }
+
+    
   return (
     <View style={styles.container}>
       <View style={{ display: "flex", flexDirection: "row" }}>

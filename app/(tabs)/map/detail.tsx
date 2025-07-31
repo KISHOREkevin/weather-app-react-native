@@ -34,8 +34,8 @@ export default function Detail() {
       setPlace(`${coordPlace && coordPlace[0].city},${coordPlace && coordPlace[0].country}`)
       
     
-      } catch (error) {
-        setError(error);
+      } catch (error:any) {
+        setError(error.message||"An unknown error occurred");
         
       }
       setLoad(false);
