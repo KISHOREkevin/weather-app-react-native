@@ -43,9 +43,9 @@ Go to release page https://github.com/KISHOREkevin/weather-app-react-native/rele
     ```
 
 ## ScreenShot
-![ScreenShot-2](./screenshots/Screenshot_20250731_204258_Expo Go.jpg)
+![ScreenShot-2](./screenshots/Screenshot-1.jpg)
 
-![Screenshot-1](./screenshots/Screenshot_20250731_204339_Expo Go.jpg)
+![Screenshot-1](./screenshots/Screenshot_2.jpg)
 
 ## Contributions
 
