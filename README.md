@@ -1,50 +1,61 @@
-# Welcome to your Expo app 👋
+# Simple Weather App with Map 
+A modern and intuitive mobile weather application built with React Native and Expo. This app provides real-time weather forecasts, allows users to search for locations, and offers an interactive map where you can select any region to view its current weather conditions.
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## Features  
+- [x] Hourly and 7 days weather forecasts.
 
-## Get started
+- [x] Current Weather: Get up-to-date weather information for your current location or any searched city.
 
-1. Install dependencies
+- [x] Location Search: Easily find weather forecasts for any city worldwide.
 
-   ```bash
-   npm install
+- [x] Interactive Map: Explore weather conditions by selecting any point on the map.
+
+- [x] Detailed Forecast: View comprehensive weather details for selected locations.
+
+- [x] User-Friendly Interface: Clean and responsive design for a seamless experience.
+
+## Technologies Used  
+
+- React Native
+- Expo Router
+- Expo Map
+- Expo Location
+- Open Meteo API
+- Ionicons
+
+## Installation
+Go to release page https://github.com/KISHOREkevin/weather-app-react-native/releases and download the `weather.apk`.
+
+## Contribution (Setup) 
+
+1. **Clone the repository**  
+   ```sh
+   git clone https://github.com/KISHOREkevin/weather-app-react-native.git weather
+   cd weather/
    ```
+2. **Install dependencies**
+    ```sh
+    npm install
+    ```
+3. Run the App
+    ```sh
+    npx expo start
+    ```
 
-2. Start the app
+## ScreenShot
+![ScreenShot-2](./screenshots/Screenshot_20250731_204258_Expo Go.jpg)
 
-   ```bash
-   npx expo start
-   ```
+![Screenshot-1](./screenshots/Screenshot_20250731_204339_Expo Go.jpg)
 
-In the output, you'll find options to open the app in a
+## Contributions
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+This project was made possible thanks to:
+- [React Native Community](https://reactnative.dev/) 
+- [Expo Community](https://github.com/expo/expo) 
+- [Open Meteo](https://open-meteo.com/) 
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+Feel free to contribute by opening issues or pull requests!
 
-## Get a fresh project
+## License
+MIT © Kishore Kevin [License](https://github.com/KISHOREkevin/todoapp-react-native/blob/main/LICENSE)  
 
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
